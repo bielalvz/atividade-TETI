@@ -1,0 +1,49 @@
+# Nome da sua pipeline
+name: Pipeline de CI
+
+# Define quando esta pipeline deve rodar
+on:
+  push:
+    branches: [ main, develop ] # Roda em pushes para main e develop
+  pull_request:
+    branches: [ develop ] # Roda em Pull Requests para o develop
+
+# Define os "nós" (jobs)
+jobs:
+  # Primeiro "nó"
+  build-job:
+    # Onde o job vai rodar (em uma máquina virtual do GitHub)
+    runs-on: ubuntu-latest
+    
+    steps:
+      # Passo 1: Ação para "baixar" o seu código para a máquina virtual
+      - name: Checkout do código
+        uses: actions/checkout@v4
+      
+      # Passo 2: Ação que simula um "build"
+      - name: Simular um build
+        run: |
+          echo "Começando o processo de build..."
+          sleep 10 # Simula um processo que demora 10s
+          echo "Build concluído com sucesso!"
+
+  # Segundo "nó"
+  test-job:
+    # Onde o job vai rodar
+    runs-on: ubuntu-latest
+    
+    # Este job só começa DEPOIS que o 'build-job' terminar
+    needs: build-job
+
+    steps:
+      # Passo 1: Baixar o código
+      - name: Checkout do código
+        uses: actions/checkout@v4
+      
+      # Passo 2: Simular testes
+      - name: Rodar testes (simulação)
+        run: |
+          echo "Começando os testes..."
+          echo "Testando o HTML..."
+          sleep 5 # Simula testes
+          echo "Testes finalizados."
